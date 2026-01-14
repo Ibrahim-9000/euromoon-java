@@ -12,6 +12,6 @@ public abstract class Locomotief {
         return maxWagons;
     }
 
-    // NIEUW: type van locomotief
+
     public abstract String getType();
 }
