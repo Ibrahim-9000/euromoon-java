@@ -15,5 +15,8 @@ De applicatie laat toe om passagiers te registreren, reizen aan te maken, ticket
 ## Bronnen
 - Canvas Cursus
 - Chat gpt
-- 
+  * Controle van Java-syntax en foutmeldingen
+  * Structureren van de main applicatielogica
+  * Opmaak van de boardinglijst-output
+- Stack overflow
 
