@@ -13,5 +13,7 @@ De applicatie laat toe om passagiers te registreren, reizen aan te maken, ticket
 - Ticket verkopen
 - Boardinglijst afdrukken
 ## Bronnen
-
+- Canvas Cursus
+- Chat gpt
+- 
 
