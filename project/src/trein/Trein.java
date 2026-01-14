@@ -7,8 +7,18 @@ public class Trein {
         this.locomotief = locomotief;
     }
 
-
     public int getCapaciteit() {
         return locomotief.getCapaciteit();
+    }
+
+
+    public Locomotief getLocomotief() {
+        return locomotief;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Locomotief: " + locomotief.getType();
     }
 }

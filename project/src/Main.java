@@ -52,25 +52,37 @@ public class Main {
     private static void registreerPassagier() {
         String voornaam = leesTekst("Voornaam: ");
         String achternaam = leesTekst("Achternaam: ");
-        String rijksregisternummer = leesTekst("Rijksregisternummer: ");
 
-        int geboortejaar = leesInt("Geboortejaar: ");
-        int geboortemaand = leesInt("Geboortemaand: ");
-        int geboortedag = leesInt("Geboortedag: ");
+        // NIEUW: rijksregisternummer met controle op enkel cijfers
+        String rijksregisternummer = leesRijksregisternummer("Rijksregisternummer (enkel cijfers): ");
 
-        try {
-            Passagier nieuwePassagier = new Passagier(
-                    voornaam,
-                    achternaam,
-                    rijksregisternummer,
-                    LocalDate.of(geboortejaar, geboortemaand, geboortedag)
-            );
+        int geboortejaar;
+        int geboortemaand;
+        int geboortedag;
 
-            passagiers.add(nieuwePassagier);
-            System.out.println("Passagier geregistreerd");
-        } catch (Exception fout) {
-            System.out.println("Ongeldige datum ingevoerd");
+
+        while (true) {
+            geboortejaar = leesInt("Geboortejaar: ");
+            geboortemaand = leesInt("Geboortemaand: ");
+            geboortedag = leesInt("Geboortedag: ");
+
+            try {
+                LocalDate.of(geboortejaar, geboortemaand, geboortedag);
+                break;
+            } catch (Exception fout) {
+                System.out.println("Ongeldige datum. Probeer opnieuw.");
+            }
         }
+
+        Passagier nieuwePassagier = new Passagier(
+                voornaam,
+                achternaam,
+                rijksregisternummer,
+                LocalDate.of(geboortejaar, geboortemaand, geboortedag)
+        );
+
+        passagiers.add(nieuwePassagier);
+        System.out.println("Passagier geregistreerd");
     }
 
     private static void maakReisAan() {
@@ -117,15 +129,32 @@ public class Main {
         Reis gekozenReis = tickets.get(0).getReis();
         String bestandsNaam = gekozenReis.getBestandsNaam() + ".txt";
 
-        try (FileWriter bestandsSchrijver = new FileWriter(bestandsNaam)) {
+        try (FileWriter writer = new FileWriter(bestandsNaam)) {
 
-            bestandsSchrijver.write("=== BOARDINGLIJST ===\n");
-            bestandsSchrijver.write("Traject: " + gekozenReis.getVan() + " -> " + gekozenReis.getNaar() + "\n");
-            bestandsSchrijver.write("Tijdstip: " + gekozenReis.getTijdstip() + "\n\n");
+            writer.write("=========== BOARDINGLIJST ===========\n");
+            writer.write("Traject: " + gekozenReis.getVan() + " -> " + gekozenReis.getNaar() + "\n");
+            writer.write("Datum & uur: " + gekozenReis.getTijdstip() + "\n");
+            writer.write("Trein: " + gekozenReis.getTrein() + "\n");
+            writer.write("------------------------------------\n");
 
-            for (Ticket huidigTicket : tickets) {
-                bestandsSchrijver.write(huidigTicket.getPassagier().toString() + "\n");
+            int aantalPassagiers = 0;
+
+            for (Ticket ticket : tickets) {
+                if (!ticket.getReis().equals(gekozenReis)) continue;
+
+                Passagier passagier = ticket.getPassagier();
+                aantalPassagiers++;
+
+                writer.write("Passagier " + aantalPassagiers + "\n");
+                writer.write("Naam: " + passagier.getVoornaam() + " " + passagier.getAchternaam() + "\n");
+                writer.write("Rijksregisternummer: " + passagier.getRijksregisternummer() + "\n");
+                writer.write("Geboortedatum: " + passagier.getGeboortedatum() + "\n");
+                writer.write("Klasse: " + (ticket.getKlasse() == Klasse.EERSTE ? "Eerste klasse" : "Tweede klasse") + "\n");
+                writer.write("------------------------------------\n");
             }
+
+            writer.write("Totaal aantal passagiers: " + aantalPassagiers + "\n");
+            writer.write("====================================\n");
 
             System.out.println("Boardinglijst aangemaakt: " + bestandsNaam);
 
@@ -133,6 +162,8 @@ public class Main {
             System.out.println("Fout bij schrijven van bestand: " + fout.getMessage());
         }
     }
+
+
 
     private static String leesTekst(String prompt) {
         System.out.print(prompt);
@@ -148,6 +179,20 @@ public class Main {
                 return Integer.parseInt(invoer);
             } catch (NumberFormatException fout) {
                 System.out.println("Ongeldige invoer, geef een getal in.");
+            }
+        }
+    }
+
+
+    private static String leesRijksregisternummer(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String invoer = scanner.nextLine();
+
+            if (invoer.matches("\\d+")) {
+                return invoer;
+            } else {
+                System.out.println("Ongeldig rijksregisternummer. Gebruik enkel cijfers.");
             }
         }
     }

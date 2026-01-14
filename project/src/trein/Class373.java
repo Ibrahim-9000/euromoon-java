@@ -1,7 +1,13 @@
 package trein;
 
 public class Class373 extends Locomotief {
+
     public Class373() {
-        maxWageons = 12;
+        this.maxWagons = 12;
+    }
+
+    @Override
+    public String getType() {
+        return "Class 373";
     }
 }
