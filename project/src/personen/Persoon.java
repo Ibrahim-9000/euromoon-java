@@ -16,6 +16,21 @@ public class Persoon {
         this.rijksregisternummer = rijksregisternummer;
         this.geboortedatum = geboortedatum;
     }
+    public String getVoornaam() {
+        return voornaam;
+    }
+
+    public String getAchternaam() {
+        return achternaam;
+    }
+
+    public String getRijksregisternummer() {
+        return rijksregisternummer;
+    }
+
+    public LocalDate getGeboortedatum() {
+        return geboortedatum;
+    }
 
 
     @Override
